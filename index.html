@@ -1090,9 +1090,11 @@
       display:flex;
       gap:1rem;
       overflow-x:auto;
+      overflow-y:hidden;
       scroll-snap-type:x mandatory;
       -webkit-overflow-scrolling:touch;
       scrollbar-width:none;
+      touch-action:pan-x;
       margin:0 calc(-1 * clamp(1.5rem,5vw,4rem));
       padding:0 clamp(1.5rem,5vw,4rem) 0.5rem;
     }
@@ -1116,27 +1118,27 @@
 
 <section class="benefits" id="benefits">
   <span class="numeral observe" style="--d:0.1s" aria-hidden="true">II</span>
-  <div class="benefits-inner section-tilt">
+  <div class="benefits-inner">
     <p class="eyebrow observe" style="--d:0s">¿Por qué tener una web?</p>
     <h2 class="observe" style="--d:0.08s">Esto es lo que cambia cuando tu negocio tiene web.</h2>
 
     <div class="benefit-grid">
-      <div class="benefit-card observe card-3d" style="--d:0.16s">
+      <div class="benefit-card observe" style="--d:0.16s">
         <span class="benefit-card-bar" aria-hidden="true"></span>
         <span class="benefit-num">24/7</span>
         <p class="benefit-text">Tu negocio sigue abierto en internet, aunque tú ya hayas cerrado por hoy.</p>
       </div>
-      <div class="benefit-card observe card-3d" style="--d:0.24s">
+      <div class="benefit-card observe" style="--d:0.24s">
         <span class="benefit-card-bar" aria-hidden="true"></span>
         <span class="benefit-num">Primera impresión</span>
         <p class="benefit-text">Antes de escribirte, la gente ya se formó una opinión de tu negocio con solo ver tu web.</p>
       </div>
-      <div class="benefit-card observe card-3d" style="--d:0.32s">
+      <div class="benefit-card observe" style="--d:0.32s">
         <span class="benefit-card-bar" aria-hidden="true"></span>
         <span class="benefit-num">Un solo link</span>
         <p class="benefit-text">Ubicación, servicios, precios y contacto: todo en un link que se manda en un segundo.</p>
       </div>
-      <div class="benefit-card observe card-3d" style="--d:0.4s">
+      <div class="benefit-card observe" style="--d:0.4s">
         <span class="benefit-card-bar" aria-hidden="true"></span>
         <span class="benefit-num">Se nota la diferencia</span>
         <p class="benefit-text">Entre un negocio con web y uno sin ella, la gente elige el que ya le generó confianza primero.</p>
