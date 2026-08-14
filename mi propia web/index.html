@@ -751,14 +751,16 @@
   <div class="ticker-track">
     <div class="ticker-group">
       <span class="item">Diseño a medida</span><span class="dot">•</span>
-      <span class="item">Dominio y hosting incluidos</span><span class="dot">•</span>
+      <span class="item">Dominio propio, sin plantillas gratuitas</span><span class="dot">•</span>
       <span class="item">Optimización SEO</span><span class="dot">•</span>
+      <span class="item">Sin permanencia</span><span class="dot">•</span>
       <span class="item">Trato directo, sin intermediarios</span><span class="dot">•</span>
     </div>
     <div class="ticker-group" aria-hidden="true">
       <span class="item">Diseño a medida</span><span class="dot">•</span>
-      <span class="item">Dominio y hosting incluidos</span><span class="dot">•</span>
+      <span class="item">Dominio propio, sin plantillas gratuitas</span><span class="dot">•</span>
       <span class="item">Optimización SEO</span><span class="dot">•</span>
+      <span class="item">Sin permanencia</span><span class="dot">•</span>
       <span class="item">Trato directo, sin intermediarios</span><span class="dot">•</span>
     </div>
   </div>
@@ -990,33 +992,80 @@
     max-width:24ch;
     text-wrap:balance;
   }
-  .benefit-list{border-top:1px solid var(--line);}
-  .benefit-row{
-    display:flex;
-    align-items:baseline;
-    gap:clamp(1.25rem,4vw,3rem);
-    padding:2rem 0;
-    border-bottom:1px solid var(--line);
-    transition:padding-left 0.4s cubic-bezier(.16,1,.3,1);
+  .benefit-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:1.5rem;
   }
-  .benefit-row:hover{padding-left:0.75rem;}
+  .benefit-card{
+    position:relative;
+    overflow:hidden;
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:2.25rem 2rem 2rem;
+  }
+  .benefit-card::before{
+    content:"";
+    position:absolute;
+    top:-30%;
+    right:-15%;
+    width:240px;
+    height:240px;
+    background:radial-gradient(circle, rgba(169,125,42,0.16), transparent 70%);
+    opacity:0;
+    transform:scale(0.75);
+    transition:opacity 0.5s ease, transform 0.6s cubic-bezier(.16,1,.3,1);
+    pointer-events:none;
+    z-index:0;
+  }
+  .benefit-card{
+    transition:border-color 0.4s ease, box-shadow 0.5s cubic-bezier(.16,1,.3,1);
+  }
+  .benefit-card:hover, .benefit-card.is-active{
+    border-color:var(--gold);
+    box-shadow:0 26px 50px -28px rgba(20,33,61,0.3);
+  }
+  .benefit-card:hover::before, .benefit-card.is-active::before{opacity:1; transform:scale(1);}
+  .benefit-card-bar{
+    position:absolute;
+    left:0;
+    bottom:0;
+    height:3px;
+    width:0;
+    background:linear-gradient(90deg, var(--gold), var(--gold-light));
+    transition:width 0.55s cubic-bezier(.16,1,.3,1);
+  }
+  .benefit-card:hover .benefit-card-bar, .benefit-card.is-active .benefit-card-bar{width:100%;}
   .benefit-num{
+    position:relative;
+    z-index:1;
+    display:block;
     font-family:var(--serif);
-    font-size:clamp(1.5rem,3.2vw,2.2rem);
+    font-size:clamp(2.5rem,4.6vw,3.4rem);
+    line-height:1;
     color:var(--gold-text);
-    line-height:1.15;
-    flex:0 0 clamp(140px,20vw,210px);
-    transition:color 0.4s ease;
+    margin:0 0 1.1rem;
+    transition:color 0.4s ease, transform 0.45s cubic-bezier(.16,1,.3,1);
   }
-  .benefit-row:hover .benefit-num{color:var(--gold);}
+  .benefit-card:hover .benefit-num, .benefit-card.is-active .benefit-num{color:var(--gold); transform:translateX(3px);}
   .benefit-text{
-    font-size:1.05rem;
+    position:relative;
+    z-index:1;
+    font-size:0.98rem;
     line-height:1.6;
     color:var(--ink-soft);
-    max-width:50ch;
     margin:0;
-    padding-top:0.3rem;
+    max-width:32ch;
+    transition:color 0.4s ease;
   }
+  .benefit-card:hover .benefit-text, .benefit-card.is-active .benefit-text{color:var(--ink);}
+  .benefit-swipe-hint{display:none;}
+  .benefit-card.observe{
+    --reveal-transform:translateY(26px);
+    transition:opacity 0.7s cubic-bezier(.16,1,.3,1), transform 0.7s cubic-bezier(.16,1,.3,1);
+  }
+
   .benefits-cta{
     margin-top:3rem;
     display:flex;
@@ -1031,39 +1080,77 @@
     color:var(--ink);
     margin:0;
   }
+  .benefits-cta .cta-btn--gold{
+    transition:transform 0.4s cubic-bezier(.16,1,.3,1), box-shadow 0.4s cubic-bezier(.16,1,.3,1);
+  }
+  .benefits-cta .cta-btn--gold:hover{
+    transform:translateY(-4px) scale(1.03);
+    box-shadow:0 16px 36px -10px rgba(200,154,72,0.55), 0 6px 16px -6px rgba(20,33,61,0.32);
+  }
 
   @media (max-width:820px){
     .benefits .numeral{font-size:clamp(5rem,24vw,7.5rem); right:0.75rem; top:0.75rem;}
     .benefits .numeral::after{width:1.6rem;}
-    .benefit-row{flex-direction:column; gap:0.4rem; align-items:flex-start; padding:1.5rem 0;}
-    .benefit-num{flex:none;}
+    .benefit-grid{
+      grid-template-columns:none;
+      display:flex;
+      gap:1rem;
+      overflow-x:auto;
+      overflow-y:hidden;
+      scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+      touch-action:pan-x;
+      margin:0 calc(-1 * clamp(1.5rem,5vw,4rem));
+      padding:0 clamp(1.5rem,5vw,4rem) 0.5rem;
+    }
+    .benefit-grid::-webkit-scrollbar{display:none;}
+    .benefit-card{
+      flex:0 0 82%;
+      scroll-snap-align:start;
+    }
+    .benefit-swipe-hint{
+      display:block;
+      margin:0.85rem 0 0;
+      font-size:0.78rem;
+      letter-spacing:0.04em;
+      color:var(--ink-soft);
+    }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .benefit-card{scroll-behavior:auto;}
   }
 </style>
 
 <section class="benefits" id="benefits">
   <span class="numeral observe" style="--d:0.1s" aria-hidden="true">II</span>
-  <div class="benefits-inner section-tilt">
+  <div class="benefits-inner">
     <p class="eyebrow observe" style="--d:0s">¿Por qué tener una web?</p>
     <h2 class="observe" style="--d:0.08s">Esto es lo que cambia cuando tu negocio tiene web.</h2>
 
-    <div class="benefit-list">
-      <div class="benefit-row observe" style="--d:0.16s">
+    <div class="benefit-grid">
+      <div class="benefit-card observe" style="--d:0s">
+        <span class="benefit-card-bar" aria-hidden="true"></span>
         <span class="benefit-num">24/7</span>
         <p class="benefit-text">Tu negocio sigue abierto en internet, aunque tú ya hayas cerrado por hoy.</p>
       </div>
-      <div class="benefit-row observe" style="--d:0.24s">
+      <div class="benefit-card observe" style="--d:0.15s">
+        <span class="benefit-card-bar" aria-hidden="true"></span>
         <span class="benefit-num">Primera impresión</span>
         <p class="benefit-text">Antes de escribirte, la gente ya se formó una opinión de tu negocio con solo ver tu web.</p>
       </div>
-      <div class="benefit-row observe" style="--d:0.32s">
+      <div class="benefit-card observe" style="--d:0.3s">
+        <span class="benefit-card-bar" aria-hidden="true"></span>
         <span class="benefit-num">Un solo link</span>
         <p class="benefit-text">Ubicación, servicios, precios y contacto: todo en un link que se manda en un segundo.</p>
       </div>
-      <div class="benefit-row observe" style="--d:0.4s">
+      <div class="benefit-card observe" style="--d:0.45s">
+        <span class="benefit-card-bar" aria-hidden="true"></span>
         <span class="benefit-num">Se nota la diferencia</span>
         <p class="benefit-text">Entre un negocio con web y uno sin ella, la gente elige el que ya le generó confianza primero.</p>
       </div>
     </div>
+    <p class="benefit-swipe-hint">Desliza para ver más →</p>
 
     <div class="benefits-cta observe" style="--d:0.48s">
       <p>Así de bien se puede ver tu negocio en internet.</p>
@@ -1076,6 +1163,41 @@
     </div>
   </div>
 </section>
+
+<script>
+(function(){
+  var isMobile = window.matchMedia('(max-width:820px)').matches;
+  var grid = document.querySelector('.benefit-grid');
+  if(!isMobile || !grid) return;
+  var cards = Array.prototype.slice.call(grid.querySelectorAll('.benefit-card'));
+  if(!cards.length) return;
+
+  var ticking = false;
+
+  function updateActive(){
+    var gridRect = grid.getBoundingClientRect();
+    var center = gridRect.left + gridRect.width / 2;
+    var closest = cards[0];
+    var closestDist = Infinity;
+    cards.forEach(function(card){
+      var r = card.getBoundingClientRect();
+      var dist = Math.abs((r.left + r.width / 2) - center);
+      if(dist < closestDist){ closestDist = dist; closest = card; }
+    });
+    cards.forEach(function(card){ card.classList.toggle('is-active', card === closest); });
+    ticking = false;
+  }
+
+  function onScroll(){
+    if(!ticking){ requestAnimationFrame(updateActive); ticking = true; }
+  }
+
+  grid.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll, {passive:true});
+  window.addEventListener('load', updateActive);
+  updateActive();
+})();
+</script>
 
 <section class="how" id="how">
   <span class="numeral observe" style="--d:0.1s" aria-hidden="true">III</span>
@@ -1781,15 +1903,15 @@
         <span class="snowflake" style="bottom:10%; left:16%; font-size:0.55rem; animation-duration:9s; animation-delay:2s;" aria-hidden="true">❄</span>
         <span class="price-badge price-badge--winter">❄ Oferta de invierno</span>
         <p class="plan-name">Mantenimiento + Hosting</p>
-        <p class="plan-desc">Tu web activa, actualizada, con hosting y soporte directo.</p>
+        <p class="plan-desc">Tu web activa, actualizada y con soporte directo. Sin permanencia: cancela cuando quieras, avisando con 30 días.</p>
 
         <div class="maint-toggle" id="maintToggle">
           <span class="toggle-pill" id="togglePill"></span>
           <button type="button" class="toggle-btn is-active" id="btnCommit" data-price="30">
-            Con compromiso<span class="toggle-sub">mínimo 6 meses</span>
+            Landing Page<span class="toggle-sub">plan de $150</span>
           </button>
           <button type="button" class="toggle-btn" id="btnFlex" data-price="50">
-            Sin compromiso<span class="toggle-sub">cancela cuando quieras</span>
+            Web Completa<span class="toggle-sub">plan de $320</span>
           </button>
         </div>
 
@@ -1798,11 +1920,11 @@
         </div>
         <p class="price-note">Precio de temporada · por tiempo limitado</p>
         <ul class="feature-list">
-          <li class="winter-feature"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l3.5 3.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Mantenimiento incluido, sin costo extra</li>
+          <li class="winter-feature"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l3.5 3.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Sin permanencia, cancela cuando quieras</li>
           <li class="winter-feature"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l3.5 3.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Hosting incluido</li>
           <li><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l3.5 3.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Cambios puntuales (info, fotos, precios)</li>
-          <li><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l3.5 3.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Prevención de caídas del sitio</li>
-          <li><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l3.5 3.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Sitio estable y seguro</li>
+          <li><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l3.5 3.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Monitoreo para detectar caídas a tiempo</li>
+          <li><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l3.5 3.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Soporte directo por WhatsApp</li>
         </ul>
         <div class="price-card-cta-wrap">
           <a class="cta-btn cta-btn--outline" href="https://wa.me/593979192213?text=Hola%2C%20quiero%20la%20oferta%20de%20invierno%20de%20mantenimiento%20y%20hosting." target="_blank" rel="noopener noreferrer" aria-label="Escribir por WhatsApp: Quiero la oferta de invierno">
@@ -2261,7 +2383,7 @@
         </button>
         <div class="faq-a-wrap">
           <div class="faq-a-inner">
-            <p>Unos pocos días, no semanas. Si es urgente, hay un plan flash con prioridad (precio aparte).</p>
+            <p>Unos pocos días desde que nos envías los textos y fotos de tu negocio, no semanas. Si necesitas prioridad, hay un plan flash (precio aparte).</p>
           </div>
         </div>
       </div>
@@ -2309,7 +2431,7 @@
         </button>
         <div class="faq-a-wrap">
           <div class="faq-a-inner">
-            <p>Un anticipo para empezar, el resto antes de publicar. Aceptamos transferencia o efectivo.</p>
+            <p>Un anticipo para empezar, el resto antes de publicar. El mantenimiento mensual se cobra por adelantado. Pago por transferencia bancaria.</p>
           </div>
         </div>
       </div>
@@ -2431,6 +2553,22 @@
   .footer-contact:hover{color:var(--bg); border-color:var(--gold-light);}
   .footer-contact:focus-visible{outline:2px solid var(--gold-light); outline-offset:3px;}
   .footer-legal{font-size:0.8rem; color:var(--bg-soft);}
+  .footer-legal-links{
+    margin-top:1.5rem;
+    font-size:0.78rem;
+    color:var(--bg-soft);
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.5rem;
+  }
+  .footer-legal-links a, .footer-legal-links a:visited{
+    color:var(--bg-soft);
+    text-decoration:none;
+    border-bottom:1px solid transparent;
+    transition:color 0.2s ease, border-color 0.2s ease;
+  }
+  .footer-legal-links a:hover{color:var(--gold-light); border-color:var(--gold-light);}
+  .footer-legal-links a:focus-visible{outline:2px solid var(--gold-light); outline-offset:3px;}
   .back-top{
     font-size:0.8rem;
     color:var(--bg-soft);
@@ -2477,6 +2615,13 @@
       </a>
       <p class="footer-legal">© <span id="footerYear"></span> Pragmat. Construyendo su autoridad en internet.</p>
       <a class="back-top" href="#heroSection">Volver arriba ↑</a>
+    </div>
+    <div class="footer-legal-links">
+      <a href="aviso-legal.html">Aviso legal</a>
+      <span aria-hidden="true">·</span>
+      <a href="privacidad.html">Política de privacidad</a>
+      <span aria-hidden="true">·</span>
+      <a href="terminos.html">Términos del servicio</a>
     </div>
   </div>
 </section>
