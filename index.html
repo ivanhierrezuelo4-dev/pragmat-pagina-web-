@@ -412,6 +412,12 @@
     max-width:16ch;
   }
 
+  /* La palabra que rota ocupa siempre el ancho de la más larga: si no, al
+     cambiar de palabra la línea se partía distinto, el hero cambiaba de alto
+     y en iPhone (Safari no compensa el scroll) toda la página saltaba. */
+  .rotate-slot{display:inline-grid; white-space:nowrap; vertical-align:top;}
+  .rotate-slot > *{grid-area:1/1; justify-self:start;}
+  .rotate-ghost{visibility:hidden;}
   .rotate-word{
     display:inline-block;
     color:var(--gold-text);
@@ -808,7 +814,7 @@
 
   <div class="hero-main">
     <div>
-      <p class="eyebrow reveal" style="--d:0.1s">Desarrollo web para <span class="rotate-word" id="rotateWord">restaurantes</span></p>
+      <p class="eyebrow reveal" style="--d:0.1s">Desarrollo web para <span class="rotate-slot"><span class="rotate-word" id="rotateWord">restaurantes</span><span class="rotate-ghost" aria-hidden="true">negocios locales</span></span></p>
       <h1 class="reveal" style="--d:0.2s">Su negocio ya inspira confianza. Ahora toca demostrarlo en internet.</h1>
       <p class="sub reveal" style="--d:0.32s">Sitios web profesionales para negocios de Quito que quieren transmitir la misma seriedad con la que ya trabajan, con la solidez de una agencia grande, sin sus precios ni sus tiempos.</p>
       <div class="cta-row reveal" style="--d:0.44s">
