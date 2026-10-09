@@ -184,7 +184,11 @@
   }
 
   *{box-sizing:border-box;}
-  html, body{margin:0; overflow-x:hidden; max-width:100%;}
+  html, body{margin:0; max-width:100%;}
+  /* overflow-x:hidden en html Y body vuelve a body un contenedor de scroll y
+     en iOS Safari provoca saltos/tirones al plegarse la barra del navegador.
+     clip recorta igual sin crear contenedor de scroll. */
+  html{overflow-x:hidden; overflow-x:clip;}
   @media (prefers-reduced-motion: no-preference){
     html{scroll-behavior:smooth;}
   }
